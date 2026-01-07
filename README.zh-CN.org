@@ -5,6 +5,7 @@
 * 概述
 
 * 前提
+[[https://github.com/deweller/switchaudio-osx][switchaudio-osx]]
 
 ** 需要的 Emacs 包
 
