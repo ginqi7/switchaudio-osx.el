@@ -24,6 +24,9 @@
 
 ;;; Code:
 
+(require 'transient)
+(require 'eieio)
+
 ;;; Custom Variables
 (defcustom switchaudio-osx-command (executable-find "SwitchAudioSource")
   "Specifies the custom variable for the path to the SwitchAudioSource executable used by the switchaudio-osx package. It uses executable-find to locate the command in the system PATH.")
@@ -116,7 +119,7 @@
 
      data)))
 
-(switchaudio-osx-all)
+;; (switchaudio-osx-all)
 
 (defun switchaudio-osx-current (&optional type)
   "API: Get the current audio device.
