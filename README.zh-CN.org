@@ -2,38 +2,96 @@
 #+author: Qiqi Jin
 #+language: zh
 
+#+HTML: <a href="https://github.com/ginqi7/switchaudio-osx.el"><img src="https://img.shields.io/badge/GitHub-Repo-181717.svg?logo=github"/></a>
+#+HTML: <a href="README.org"><img src="https://img.shields.io/badge/README-English-555555.svg"/></a>
+
 * 概述
 
-* 前提
-[[https://github.com/deweller/switchaudio-osx][switchaudio-osx]]
+一个用于在 macOS 上切换音频输出设备的 Emacs 包。它提供了简单的接口来与 [[https://github.com/deweller/switchaudio-osx][switchaudio-osx]] 命令行工具进行交互。
 
-** 需要的 Emacs 包
+* 前提条件
 
-** 安装
-+ 克隆项目到你自己的 Emacs 配置目录下：
-#+BEGIN_SRC sh
-  git clone https://github.com/ginqi7/switchaudio-osx.el ~/.emacs.d/lisp/switchaudio-osx;
-#+END_SRC
+- macOS
+- [[https://github.com/deweller/switchaudio-osx][switchaudio-osx]] - 使用 Homebrew 安装：
+  #+BEGIN_SRC sh
+    brew install switchaudio-osx
+  #+END_SRC
 
-+ 把克隆的路径添加到 =load-path= 当中
+* 安装
+
+** 从 Git 安装
+
+1. 克隆仓库到你的 Emacs 加载路径：
+   #+BEGIN_SRC sh
+     git clone https://github.com/ginqi7/switchaudio-osx.el ~/.emacs.d/lisp/switchaudio-osx
+   #+END_SRC
+
+2. 在 Emacs 配置中将路径添加到 =load-path=：
+   #+BEGIN_SRC emacs-lisp
+     (add-to-list 'load-path "~/.emacs.d/lisp/switchaudio-osx")
+     (require 'switchaudio-osx)
+   #+END_SRC
+
+* 用法
+
+** 命令
+
+| 命令                         | 描述                                      |
+|------------------------------+-------------------------------------------|
+| =M-x switchaudio-osx-list=   | 列出所有可用的音频设备                    |
+| =M-x switchaudio-osx-switch= | 交互式切换到不同的音频设备                |
+| =M-x switchaudio-osx-mute=   | 静音/取消静音（待实现）                   |
+
+** 配置示例
+
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'load-path "~/.emacs.d/lisp/switchaudio-osx")
-#+END_SRC
-
-* 配置
-
-#+BEGIN_SRC emacs-lisp
+  ;; 加载包
   (require 'switchaudio-osx)
-#+end_src
 
-** 变量
+  ;; 将切换命令绑定到快捷键
+  (global-set-key (kbd "C-c a s") 'switchaudio-osx-switch)
 
-| 变量 | 默认值 | 解释 |
-|------+--------+------|
-|      |        |      |
+  ;; 列出设备
+  (global-set-key (kbd "C-c a l") 'switchaudio-osx-list)
+#+END_SRC
 
-* 特性
+* API 参考
 
-* 例子
+| 函数                        | 描述                                |
+|-----------------------------+-------------------------------------|
+| =switchaudio-osx-all=        | 获取所有音频设备列表                |
+| =switchaudio-osx-current=    | 获取当前音频设备                    |
+| =switchaudio-osx-active=     | 根据设备信息激活设备                |
+| =switchaudio-osx-list=       | 交互式：列出所有设备                |
+| =switchaudio-osx-switch=     | 交互式：切换音频设备                |
+| =switchaudio-osx-mute=       | 交互式：静音/取消静音（待实现）     |
 
-* Footnotes
+* 自定义
+
+| 变量                         | 默认值                       | 描述                          |
+|------------------------------+------------------------------+-------------------------------|
+| =switchaudio-osx-command=     | =(executable-find "SwitchAudioSource")= | SwitchAudioSource 命令的路径 |
+
+* 示例
+
+** 获取所有设备
+#+BEGIN_SRC emacs-lisp
+  (switchaudio-osx-all)
+  ;; => 设备哈希表列表
+#+END_SRC
+
+** 获取当前设备
+#+BEGIN_SRC emacs-lisp
+  (switchaudio-osx-current)
+  ;; => 当前设备的哈希表
+#+END_SRC
+
+** 切换到特定设备
+#+BEGIN_SRC emacs-lisp
+  (let ((device (car (switchaudio-osx-all))))
+    (switchaudio-osx-active device))
+#+END_SRC
+
+* 许可证
+
+本包采用 [[https://www.gnu.org/licenses/gpl-3.0.html][GNU 通用公共许可证 v3.0]] 授权。
